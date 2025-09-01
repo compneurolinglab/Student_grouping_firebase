@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MBTI-Based Student Grouping System</title>
+    <link rel="stylesheet" href="teacher.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>MBTI-Based Student Grouping System</h1>
+            <p>Manage student MBTI data and create balanced groups based on personality types</p>
+            <div class="header-actions">
+                <a href="index.html" class="action-btn-large">🏠 Home</a>
+                <button id="refreshData" class="action-btn-large">🔄 Refresh Data</button>
+                <button id="exportMBTIGroups" class="action-btn-large">📋 Export Groups</button>
+                <button id="exportMBTIStats" class="action-btn-large">📈 Export Statistics</button>
+
+                <button id="clearAllData" class="action-btn-large danger">🗑️ Clear All Data</button>
+                <button id="manageDuplicates" class="action-btn-large">🔍 Manage Duplicates</button>
+            </div>
+        </header>
+
+        <main>
+            <!-- Overview Cards -->
+            <section class="overview-cards">
+                <div class="overview-card">
+                    <div class="card-icon">👥</div>
+                    <div class="card-content">
+                        <div class="card-number" id="totalMBTIStudents">0</div>
+                        <div class="card-label">Total Students</div>
+                    </div>
+                </div>
+                <div class="overview-card">
+                    <div class="card-icon">🧠</div>
+                    <div class="card-content">
+                        <div class="card-number" id="uniqueMBTITypes">0</div>
+                        <div class="card-label">MBTI Types</div>
+                    </div>
+                </div>
+                <div class="overview-card">
+                    <div class="card-icon">⚖️</div>
+                    <div class="card-content">
+                        <div class="card-number" id="mbtiBalance">0%</div>
+                        <div class="card-label">Type Balance</div>
+                    </div>
+                </div>
+                <div class="overview-card">
+                    <div class="card-icon">🕒</div>
+                    <div class="card-content">
+                        <div class="card-number" id="lastMBTIUpdate">-</div>
+                        <div class="card-label">Last Update</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- MBTI Statistics Section -->
+            <section class="mbti-statistics" id="mbtiStatisticsSection">
+                <h2>MBTI Type Distribution</h2>
+                <div class="stats-container">
+                    <div class="dimension-stats" id="dimensionStats">
+                        <!-- Dimension statistics will be populated here -->
+                    </div>
+                    <div class="type-grid" id="mbtiTypeGrid">
+                        <!-- MBTI type grid will be populated here -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Student List Section -->
+            <section class="student-list-section">
+                <div class="section-header">
+                    <h2>Student MBTI Data</h2>
+                    <div class="list-controls">
+                        <input type="text" id="searchInput" placeholder="Search by name or MBTI type..." class="search-input">
+                        <select id="sortBy" class="sort-select">
+                            <option value="name">Sort by Name</option>
+                            <option value="mbtiType">Sort by MBTI Type</option>
+                            <option value="submitTime">Sort by Submit Time</option>
+                        </select>
+                        <select id="filterByType" class="filter-select">
+                            <option value="">All MBTI Types</option>
+                            <optgroup label="Analysts (NT)">
+                                <option value="INTJ">INTJ - Architect</option>
+                                <option value="INTP">INTP - Thinker</option>
+                                <option value="ENTJ">ENTJ - Commander</option>
+                                <option value="ENTP">ENTP - Debater</option>
+                            </optgroup>
+                            <optgroup label="Diplomats (NF)">
+                                <option value="INFJ">INFJ - Advocate</option>
+                                <option value="INFP">INFP - Mediator</option>
+                                <option value="ENFJ">ENFJ - Protagonist</option>
+                                <option value="ENFP">ENFP - Campaigner</option>
+                            </optgroup>
+                            <optgroup label="Sentinels (SJ)">
+                                <option value="ISTJ">ISTJ - Logistician</option>
+                                <option value="ISFJ">ISFJ - Defender</option>
+                                <option value="ESTJ">ESTJ - Executive</option>
+                                <option value="ESFJ">ESFJ - Consul</option>
+                            </optgroup>
+                            <optgroup label="Explorers (SP)">
+                                <option value="ISTP">ISTP - Virtuoso</option>
+                                <option value="ISFP">ISFP - Adventurer</option>
+                                <option value="ESTP">ESTP - Entrepreneur</option>
+                                <option value="ESFP">ESFP - Entertainer</option>
+                            </optgroup>
+                        </select>
+                        <select id="pageSize" class="page-size-select">
+                            <option value="25">25 per page</option>
+                            <option value="50" selected>50 per page</option>
+                            <option value="100">100 per page</option>
+                            <option value="200">200 per page</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="studentsList" class="students-list">
+                    <!-- Students will be populated here -->
+                </div>
+                <div id="pagination" class="pagination" style="display: none;">
+                    <button id="prevPage" class="pagination-btn">← Previous</button>
+                    <div id="pageNumbers" class="page-numbers"></div>
+                    <button id="nextPage" class="pagination-btn">Next →</button>
+                    <div id="paginationInfo" class="pagination-info"></div>
+                </div>
+            </section>
+
+            <!-- MBTI Grouping Section -->
+            <section class="grouping-section" id="mbtiGroupingSection">
+                <div class="section-header">
+                    <h2>MBTI-Based Group Generation</h2>
+                    <div class="grouping-controls">
+                        <label for="mbtiGroupCount">Number of Groups:</label>
+                        <input type="number" id="mbtiGroupCount" min="2" max="20" value="4" class="group-count-input">
+                        <button id="generateMBTIGroups" class="generate-btn">Generate Balanced Groups</button>
+                        <button id="regenerateMBTIGroups" class="regenerate-btn" style="display: none;">Regenerate Groups</button>
+                    </div>
+                    <div class="grouping-info">
+                        <p>Groups will be balanced across all four MBTI dimensions (E/I, S/N, T/F, J/P) to ensure diverse personality representation in each group.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Groups Display -->
+            <div id="mbtiGroupsContainer" class="groups-container" style="display: none;">
+                <!-- Generated groups will be displayed here -->
+            </div>
+
+            <!-- Group Statistics -->
+            <section id="mbtiGroupStats" class="group-stats" style="display: none;">
+                <h2>Group Generation Statistics</h2>
+                <div id="mbtiStatsContent" class="stats-content">
+                    <!-- Group statistics will be displayed here -->
+                </div>
+            </section>
+
+            <!-- MBTI Compatibility Analysis -->
+            <section id="mbtiCompatibilitySection" class="compatibility-section" style="display: none;">
+                <h2>MBTI Compatibility Analysis</h2>
+                <div id="compatibilityMatrix" class="compatibility-matrix">
+                    <!-- Compatibility matrix will be displayed here -->
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>&copy; 2025 CityUHK - Languages, Machines & Brains Lab (LAMB)</p>
+        </footer>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h3>Confirm Action</h3>
+            <p id="confirmMessage">Are you sure you want to proceed?</p>
+            <div class="modal-actions">
+                <button id="confirmYes" class="confirm-btn">Yes, Proceed</button>
+                <button id="confirmNo" class="cancel-btn">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    
+    <!-- Firebase配置 -->
+    <script src="firebase-config.js"></script>
+    
+    <script src="teacher-mbti.js"></script>
+</body>
+</html>

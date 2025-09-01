@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interest-Based Student Grouping System</title>
+    <link rel="stylesheet" href="teacher.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Interest-Based Student Grouping System</h1>
+            <div class="header-actions">
+                <a href="index.html" class="action-btn-large">🏠 Home</a>
+                <button id="refreshData" class="action-btn-large">🔄 Refresh Data</button>
+                <button id="exportGroups" class="action-btn-large">📋 Export Groups</button>
+                <button id="exportBirthdays" class="action-btn-large">🎂 Export Birthdays</button>
+
+                <button id="clearAllData" class="action-btn-large danger">🗑️ Clear All Data</button>
+                <button id="manageDuplicates" class="action-btn-large">🔍 Manage Duplicates</button>
+            </div>
+        </header>
+
+        <main>
+            <!-- Overview Cards -->
+            <section class="overview-cards">
+                <div class="overview-card">
+                    <div class="card-icon">👥</div>
+                    <div class="card-content">
+                        <div class="card-number" id="totalStudents">0</div>
+                        <div class="card-label">Total Students</div>
+                    </div>
+                </div>
+                <div class="overview-card">
+                    <div class="card-icon">🎯</div>
+                    <div class="card-content">
+                        <div class="card-number" id="uniqueInterests">0</div>
+                        <div class="card-label">Unique Interests</div>
+                    </div>
+                </div>
+                <div class="overview-card">
+                    <div class="card-icon">🎂</div>
+                    <div class="card-content">
+                        <div class="card-number" id="uniqueBirthdays">0</div>
+                        <div class="card-label">Unique Birthdays</div>
+                    </div>
+                </div>
+                <div class="overview-card">
+                    <div class="card-icon">🕒</div>
+                    <div class="card-content">
+                        <div class="card-number" id="lastUpdate">-</div>
+                        <div class="card-label">Last Update</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Student List Section -->
+            <section class="student-list-section">
+                <div class="section-header">
+                    <h2>Student Interest Data</h2>
+                    <div class="list-controls">
+                        <input type="text" id="searchInput" placeholder="Search by name or interests..." class="search-input">
+                        <select id="sortBy" class="sort-select">
+                            <option value="name">Sort by Name</option>
+                            <option value="birthDate">Sort by Birth Date</option>
+                            <option value="submitTime">Sort by Submit Time</option>
+                        </select>
+                        <select id="pageSize" class="page-size-select">
+                            <option value="25">25 per page</option>
+                            <option value="50" selected>50 per page</option>
+                            <option value="100">100 per page</option>
+                            <option value="200">200 per page</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="studentsList" class="students-list">
+                    <!-- Students will be populated here -->
+                </div>
+                <div id="pagination" class="pagination" style="display: none;">
+                    <button id="prevPage" class="pagination-btn">← Previous</button>
+                    <div id="pageNumbers" class="page-numbers"></div>
+                    <button id="nextPage" class="pagination-btn">Next →</button>
+                    <div id="paginationInfo" class="pagination-info"></div>
+                </div>
+            </section>
+
+            <!-- Grouping Section -->
+            <section class="grouping-section" id="groupingSection">
+                <div class="section-header">
+                    <h2>Interest-Based Group Generation</h2>
+                    <div class="grouping-controls">
+                        <label for="groupCount">Number of Groups:</label>
+                        <input type="number" id="groupCount" min="2" max="20" value="4" class="group-count-input">
+                        <button id="generateGroups" class="generate-btn">Generate Groups</button>
+                        <button id="regenerateGroups" class="regenerate-btn" style="display: none;">Regenerate Groups</button>
+                    </div>
+                    <div class="grouping-info">
+                        <p>Groups will be created based on interest similarity to enhance collaboration and engagement.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Groups Display -->
+            <div id="groupsContainer" class="groups-container" style="display: none;">
+                <!-- Generated groups will be displayed here -->
+            </div>
+
+            <!-- Group Statistics -->
+            <section id="groupStats" class="group-stats" style="display: none;">
+                <h2>Group Generation Statistics</h2>
+                <div id="statsContent" class="stats-content">
+                    <!-- Group statistics will be displayed here -->
+                </div>
+            </section>
+
+            <!-- Interest Analysis Section -->
+            <section id="analysisSection" class="analysis-section" style="display: none;">
+                <h2>Interest Analysis</h2>
+                <div id="interestAnalysis" class="interest-analysis">
+                    <!-- Interest analysis will be displayed here -->
+                </div>
+            </section>
+
+            <!-- Birthday Analysis Section -->
+            <section id="birthdaySection" class="birthday-section" style="display: none;">
+                <h2>Birthday Analysis</h2>
+                <div id="birthdayAnalysis" class="birthday-analysis">
+                    <!-- Birthday analysis will be displayed here -->
+                </div>
+            </section>
+
+            <!-- Relationship Graph Section -->
+            <section id="graphSection" class="graph-section" style="display: none;">
+                <h2>Student Interest Relationships</h2>
+                <div class="graph-container">
+                    <canvas id="graphCanvas" width="600" height="400"></canvas>
+                </div>
+                <div class="graph-legend">
+                    <p>This graph shows connections between students based on shared interests. Thicker lines indicate more shared interests.</p>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>&copy; 2025 CityUHK - Languages, Machines & Brains Lab (LAMB)</p>
+        </footer>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h3>Confirm Action</h3>
+            <p id="confirmMessage">Are you sure you want to proceed?</p>
+            <div class="modal-actions">
+                <button id="confirmYes" class="confirm-btn">Yes, Proceed</button>
+                <button id="confirmNo" class="cancel-btn">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    
+    <!-- Firebase配置 -->
+    <script src="firebase-config.js"></script>
+    
+    <script src="teacher.js"></script>
+</body>
+</html>

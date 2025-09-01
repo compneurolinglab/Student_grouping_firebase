@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student MBTI Form</title>
+    <link rel="stylesheet" href="student.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Student MBTI Form</h1>
+            <div class="mbti-info">
+                <p>🔗 MBTI Test Link: <a href="https://www.16personalities.com/" target="_blank">16Personalities.com</a></p>
+            </div>
+        </header>
+
+        <main>
+            <div class="form-container">
+                <div class="form-section">
+                    <h2>Personal Information & MBTI</h2>
+                    <div id="submissionStatus" class="status-message" style="display: none;"></div>
+                    <form id="mbtiForm">
+                        <div class="form-group">
+                            <label for="studentName">Full Name *</label>
+                            <p class="field-instruction">Please ensure your name is complete and accurate.</p>
+                            <input type="text" id="studentName" required placeholder="Enter your complete name">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="mbtiType">MBTI Personality Type *</label>
+                            <p class="field-instruction">If you're unsure, take the test at <a href="https://www.16personalities.com/" target="_blank">16personalities.com</a> first.</p>
+                            <select id="mbtiType" required>
+                                <option value="">Select your MBTI type</option>
+                                <optgroup label="Analysts (NT)">
+                                    <option value="INTJ">INTJ - Architect</option>
+                                    <option value="INTP">INTP - Thinker</option>
+                                    <option value="ENTJ">ENTJ - Commander</option>
+                                    <option value="ENTP">ENTP - Debater</option>
+                                </optgroup>
+                                <optgroup label="Diplomats (NF)">
+                                    <option value="INFJ">INFJ - Advocate</option>
+                                    <option value="INFP">INFP - Mediator</option>
+                                    <option value="ENFJ">ENFJ - Protagonist</option>
+                                    <option value="ENFP">ENFP - Campaigner</option>
+                                </optgroup>
+                                <optgroup label="Sentinels (SJ)">
+                                    <option value="ISTJ">ISTJ - Logistician</option>
+                                    <option value="ISFJ">ISFJ - Defender</option>
+                                    <option value="ESTJ">ESTJ - Executive</option>
+                                    <option value="ESFJ">ESFJ - Consul</option>
+                                </optgroup>
+                                <optgroup label="Explorers (SP)">
+                                    <option value="ISTP">ISTP - Virtuoso</option>
+                                    <option value="ISFP">ISFP - Adventurer</option>
+                                    <option value="ESTP">ESTP - Entrepreneur</option>
+                                    <option value="ESFP">ESFP - Entertainer</option>
+                                </optgroup>
+                            </select>
+                        </div>
+
+
+
+                        <div class="form-group">
+                            <label for="mbtiConfidence">Confidence in MBTI Result</label>
+                            <p class="field-instruction">How confident are you in your MBTI type result?</p>
+                            <select id="mbtiConfidence">
+                                <option value="high">Very confident - I've taken multiple tests and they're consistent</option>
+                                <option value="medium" selected>Moderately confident - This seems accurate to me</option>
+                                <option value="low">Not very confident - I'm still exploring my personality type</option>
+                            </select>
+                        </div>
+
+
+
+                        <div class="form-actions">
+                            <button type="submit">Submit MBTI Information</button>
+                            <button type="button" id="clearForm">Clear Form</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="info-section">
+                    <h2>Submission Status</h2>
+                    <div id="statusMessage" class="status-message">
+                        <p>Please fill in complete information before submitting</p>
+                    </div>
+                    
+                    <div class="already-submitted" id="alreadySubmitted" style="display: none;">
+                        <h3>Your submitted information:</h3>
+                        <div id="submittedInfo" class="submitted-info"></div>
+                        <button id="editInfo" class="edit-btn">Edit Information</button>
+                    </div>
+
+
+                </div>
+            </div>
+
+            <!-- Group Assignment Section -->
+            <section class="group-assignment" id="groupAssignment" style="display: none;">
+                <h2>Your Group Assignment</h2>
+                <div id="groupInfo" class="group-info">
+                    <!-- Group information will be displayed here -->
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>&copy; 2025 CityUHK - Languages, Machines & Brains Lab (LAMB)</p>
+        </footer>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    
+    <!-- Firebase配置 -->
+    <script src="firebase-config.js"></script>
+    
+    <script src="student-mbti.js"></script>
+</body>
+</html>
